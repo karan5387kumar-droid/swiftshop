@@ -25,10 +25,8 @@ class Product(db.Model):
 
 # --- AUTO-GENERATE DATABASE & INSERT THE 15 ITEMS ---
 with app.app_context():
-    # Recreates database if it is deleted or malformed
     db.create_all() 
     
-    # Only adds items if the database table is completely empty
     if not Product.query.first(): 
         print("Seeding database with 15 products...")
         items = [
@@ -131,7 +129,7 @@ def add_product():
 @app.route('/admin/edit_product/<int:id>', methods=['GET', 'POST'])
 @admin_required
 def edit_product(id):
-    product = Product.query.get_or_404(id)
+    product = db.get_or_404(Product, id)  # FIXED HERE
     if request.method == 'POST':
         product.name = request.form.get('name')
         product.price = float(request.form.get('price'))
@@ -146,7 +144,7 @@ def edit_product(id):
 @app.route('/delete/<int:id>', methods=['POST'])
 @admin_required
 def delete_product(id):
-    product = Product.query.get_or_404(id)
+    product = db.get_or_404(Product, id)  # FIXED HERE
     db.session.delete(product)
     db.session.commit()
     flash('Product deleted successfully!')
