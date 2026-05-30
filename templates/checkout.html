@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | SwiftShop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-color: #2c3e50; }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background-color: var(--primary-color) !important; }
+        .card { border-radius: 15px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark mb-5">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">SWIFTSHOP</a>
+            <a href="{{ url_for('view_cart') }}" class="btn btn-outline-light btn-sm">Return to Cart</a>
+        </div>
+    </nav>
+
+    <main class="container mb-5">
+        <div class="row g-5">
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3 fw-bold">Shipping Address</h4>
+                <form action="{{ url_for('checkout') }}" method="POST" class="card p-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label class="form-label">First name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Last name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" placeholder="1234 Main St" required>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Country</label>
+                            <select class="form-select" required>
+                                <option value="">Choose...</option>
+                                <option>United States</option>
+                                <option>India</option>
+                                <option>United Kingdom</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    <h4 class="mb-3 fw-bold">Payment</h4>
+                    <div class="my-3">
+                        <div class="form-check">
+                            <input name="paymentMethod" type="radio" class="form-check-input" checked required>
+                            <label class="form-check-label">Credit Card</label>
+                        </div>
+                        <div class="form-check">
+                            <input name="paymentMethod" type="radio" class="form-check-input" required>
+                            <label class="form-check-label">PayPal</label>
+                        </div>
+                    </div>
+
+                    <button class="w-100 btn btn-primary btn-lg mt-4" type="submit">Complete Purchase</button>
+                </form>
+            </div>
+
+            <div class="col-md-5 col-lg-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary fw-bold">Your summary</span>
+                </h4>
+                <ul class="list-group mb-3 card shadow-sm">
+                    {% for item in items %}
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ item.name }}</h6>
+                        </div>
+                        <span class="text-muted">${{ item.price }}</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <div class="text-success">
+                            <h6 class="my-0">Promo code</h6>
+                            <small>FREE_SHIPPING</small>
+                        </div>
+                        <span class="text-success">−$0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (USD)</span>
+                        <strong>${{ total }}</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
